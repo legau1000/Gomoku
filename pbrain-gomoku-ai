@@ -36,19 +36,24 @@ def create_map(map_size):
         i += 1
     print("OK - everything is good")
 
+def SplitInput():
+    command = input()
+    command_array = command.split(" ")
+    if (command_array[0] == "END"):
+        sys.exit(0)
+    return (command_array)
+
 def main():
     end = 0
+    command_array = SplitInput()
+    if (command_array[0] == "START"):
+        map_size = int(command_array[1])
+        create_map(map_size)
+    else:
+        sys.exit(84)
     while (end != 1):
-        command = input()
-        command_array = command.split(" ")
-        if (command_array[0] == "END"):
-            end = 1
-        elif (command_array[0] == "START"):
-            map_size = int(command_array[1])
-            create_map(map_size)
-            print("OK - ui")
-        else:
-            process_command(command_array)
+        command_array = SplitInput()
+        process_command(command_array)
     sys.exit(0)
 
 if __name__ == "__main__":
