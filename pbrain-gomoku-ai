@@ -27,7 +27,7 @@ def process_command(command_array):
         # First move
     elif (command_array[0] == "ABOUT"):
         print("name=\"ui\", version=\"0.1.1\", author=\"Mananka && legau1000\", country=\"FRANCE\"")
-    print(map)
+    #print(map)
 
 def create_map(map_size):
     i = 0
