@@ -15,18 +15,18 @@ def add_opposite_play_to(coord):
             map[int(list_coord[0]) - 1][int(list_coord[1]) - 1] = list_coord[2]
 
 def process_command(command_array):
-    if (command_array[0] == "BEGIN"):
-        print(command_array)
-        #algo_min_max
-    elif (command_array[0] == "ABOUT"):
-        print("name=\"ui\", version=\"0.1.1\", author=\"Mananka && legau1000\", country=\"FRANCE\"")
-    elif (command_array[0] == "TURN"):
+    if (command_array[0] == "TURN"):
         add_opposite_play_to(command_array[1])
         #algo_min_max
     elif (command_array[0] == "BOARD"):
         while (command_array != "DONE"):
             command_array = input()
             add_opposite_play_to(command_array)
+    elif (command_array[0] == "BEGIN"):
+        print(command_array)
+        # First move
+    elif (command_array[0] == "ABOUT"):
+        print("name=\"ui\", version=\"0.1.1\", author=\"Mananka && legau1000\", country=\"FRANCE\"")
     print(map)
 
 def create_map(map_size):
