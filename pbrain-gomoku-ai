@@ -1,21 +1,11 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3 
 
 import sys
 import threading
+from Class import MyGame
 
 map = []
 map_size = 0
-
-class MyGame:
-    def __init__(self):
-        self.value = 1
-
-    def SetValue(self, val):
-        print("thread error")
-        self.value = val
-
-    def GetValue(self):
-        return self.value
 
 def add_opposite_play_to(coord):
     print(coord)
@@ -26,7 +16,11 @@ def add_opposite_play_to(coord):
         else:
             map[int(list_coord[0]) - 1][int(list_coord[1]) - 1] = list_coord[2]
 
-def process_command(command_array):
+def WriteText(string):
+    print(string)
+    sys.stdout.flush()
+
+def process_command(command_array, MyBoard, EnnemyBoard):
     if (command_array[0] == "TURN"):
         add_opposite_play_to(command_array[1])
         #algo_min_max
@@ -35,33 +29,46 @@ def process_command(command_array):
             command_array = input()
             add_opposite_play_to(command_array)
     elif (command_array[0] == "BEGIN"):
-        print(command_array)
-        # First move
+        # First move at the middle
+        MyBoard.addMyMouve(int(MyBoard.GetSize() / 2), int(MyBoard.GetSize() / 2))
+        EnnemyBoard.addEnemyMouve(int(EnnemyBoard.GetSize() / 2), int(EnnemyBoard.GetSize() / 2))
+        WriteText(str(int(EnnemyBoard.GetSize() / 2)) + "," + str(int(EnnemyBoard.GetSize() / 2)))
+        #MyBoard.PrintMap()
+        #EnnemyBoard.PrintMap()
     elif (command_array[0] == "ABOUT"):
-        print("name=\"ui\", version=\"0.1.1\", author=\"Mananka && legau1000\", country=\"FRANCE\"")
+        WriteText("name=\"ui\", version=\"0.1.1\", author=\"Mananka && legau1000\", country=\"FRANCE\"")
     else:
-        print("ERROR Unknow command. Try again!")
-    #print(map)
+        WriteText("UNKNOWN Unknow command. Try again!")
 
-def create_map(map_size):
-    i = 0
-    while (i < map_size):
-        map.append(['0'] * map_size)
-        i += 1
-    print("OK - everything is good")
+def StartGame(MyBoard, EnnemyBoard):
+    command_array = SplitInput()
+    process_command(command_array, MyBoard, EnnemyBoard)
 
 def SplitInput():
     command = input()
     command_array = command.split(" ")
     if (command_array[0] == "END"):
         sys.exit(0)
-    return (command_array)
+    return command_array
 
 def MyThread(ClassGame, val):
     ClassGame.SetValue(val)
 
-def main():
-#    Game = MyGame()
+def StartFunctionGame():
+    try:
+        command_array = SplitInput()
+        if (command_array[0] == "START"):
+            if (int(command_array[1]) >= 5):
+                WriteText("OK")
+                return (int(command_array[1]))
+            else:
+                WriteText("ERROR message - unsupported size or other error")
+                sys.exit(84)
+    except:
+        WriteText("ERROR message - unsupported size or other error")
+        sys.exit(84)
+
+if __name__ == "__main__":
 #    GameTwo = MyGame()
 #    TabThread = []
 #    TabThread.append(threading.Thread(target=MyThread, args=(Game, 10)))
@@ -70,21 +77,12 @@ def main():
 #    TabThread[1].start()
 #    for index in range(2):
 #        TabThread[index].join()
+#    File = open("C:\\Users\\legau1000\\Desktop\\IA\\guru99.txt", "w+")
+#    File.write("Error link\n")
     end = 0
-    try:
-        command_array = SplitInput()
-        if (command_array[0] == "START"):
-            if (int(command_array[1]) >= 5):
-                map_size = int(command_array[1])
-                create_map(map_size)
-            else:
-                print("ERROR message - unsupported size or other error")
-    except:
-        sys.exit(84)
-    while (end != 1):
-        command_array = SplitInput()
-        process_command(command_array)
+    size = int(StartFunctionGame())
+    MyBoard = MyGame(size)
+    EnnemyBoard = MyGame(size)
+    while (1):
+        StartGame(MyBoard, EnnemyBoard)
     sys.exit(0)
-
-if __name__ == "__main__":
-    main()
