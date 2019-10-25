@@ -1,9 +1,21 @@
 #!/usr/bin/env python3
 
 import sys
+import threading
 
 map = []
 map_size = 0
+
+class MyGame:
+    def __init__(self):
+        self.value = 1
+
+    def SetValue(self, val):
+        print("thread error")
+        self.value = val
+
+    def GetValue(self):
+        return self.value
 
 def add_opposite_play_to(coord):
     print(coord)
@@ -45,13 +57,29 @@ def SplitInput():
         sys.exit(0)
     return (command_array)
 
+def MyThread(ClassGame, val):
+    ClassGame.SetValue(val)
+
 def main():
+#    Game = MyGame()
+#    GameTwo = MyGame()
+#    TabThread = []
+#    TabThread.append(threading.Thread(target=MyThread, args=(Game, 10)))
+#    TabThread.append(threading.Thread(target=MyThread, args=(GameTwo, 5)))
+#    TabThread[0].start()
+#    TabThread[1].start()
+#    for index in range(2):
+#        TabThread[index].join()
     end = 0
-    command_array = SplitInput()
-    if (command_array[0] == "START"):
-        map_size = int(command_array[1])
-        create_map(map_size)
-    else:
+    try:
+        command_array = SplitInput()
+        if (command_array[0] == "START"):
+            if (int(command_array[1]) >= 5):
+                map_size = int(command_array[1])
+                create_map(map_size)
+            else:
+                print("ERROR message - unsupported size or other error")
+    except:
         sys.exit(84)
     while (end != 1):
         command_array = SplitInput()
