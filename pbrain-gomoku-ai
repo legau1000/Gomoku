@@ -74,19 +74,37 @@ def calcBestMouve(MyBoard, EnnemyBoard):
     PutMyPieces(MyBoard, EnnemyBoard, x, y)
     WriteText(str(x) + "," + str(y))
 
+def BoardFunction(MyBoard, EnnemyBoard):
+    command_array = ["lel"]
+    command = input()
+    command_array = command.split(",")
+    while (command_array[0] != "DONE"):
+        print(command_array)
+        x = int(command_array[0])
+        y = int(command_array[1])
+        if (int(command_array[2]) == 1):
+            PutMyPieces(MyBoard, EnnemyBoard, x, y)
+        else:
+            PutEnemyPieces(MyBoard, EnnemyBoard, x, y)
+        command = input()
+        command_array = command.split(",")
+
 def process_command(command_array, MyBoard, EnnemyBoard):
     if (command_array[0] == "TURN"):
         #Algo Maison
         position = command_array[1].split(',')
         PutEnemyPieces(MyBoard, EnnemyBoard, int(position[0]), int(position[1]))
+        #print("---------------------------------------------------------------------")
+        #MyBoard.PrintMap()
+        #EnnemyBoard.PrintMap()
+        #print("---------------------------------------------------------------------")
         calcBestMouve(MyBoard, EnnemyBoard)
         #print("---------------------------------------------------------------------")
         #MyBoard.PrintMap()
         #EnnemyBoard.PrintMap()
         #print("---------------------------------------------------------------------")
     elif (command_array[0] == "BOARD"):
-        while (command_array[0] != "DONE"):
-            command_array = SplitInput()
+        BoardFunction(MyBoard, EnnemyBoard)
     elif (command_array[0] == "BEGIN"):
         # First move at the middle
         x = int(MyBoard.GetSize() / 2)

@@ -53,8 +53,8 @@ class MyMap:
             print()
 
     def PutDanger(self, x, y):
-        size = int(3)
-        value = int(3)
+        size = int(2)
+        value = int(2)
         for index in range(size):
             if (y - index - 1 >= 0 and self._Map[x][y - index - 1].GetPlayer() == '.'):
                 self._Map[x][y - index - 1].ChangeDanger(value - index)
@@ -113,8 +113,8 @@ class MyMap:
         return TabMouve
 
     def PutSafe(self, x, y):
-        size = int(3)
-        value = int(3)
+        size = int(2)
+        value = int(2)
         for index in range(size):
             if (y - index - 1 >= 0 and self._Map[x][y - index - 1].GetPlayer() == 'P'):
                 for idx in range(size - index):
