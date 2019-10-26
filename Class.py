@@ -17,7 +17,10 @@ class MyDanger:
             self._Danger = 0
 
     def GetDanger(self):
-        return self._Danger
+        if (self._Player == '.')
+            return self._Danger
+        else:
+            return 0
 
 class MyMap:
     def __init__(self, size):
