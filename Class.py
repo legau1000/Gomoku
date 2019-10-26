@@ -151,7 +151,7 @@ class MyMap:
 class MyGame:
     def __init__(self, size):
         self._size = size
-        self._player = 'O'
+        self._player = 'X'
         self._Map = MyMap(size)
 
     def PrintMap(self):
