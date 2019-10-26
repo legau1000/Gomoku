@@ -4,41 +4,103 @@ import sys
 import threading
 from Class import MyGame
 
-map = []
-map_size = 0
-
-def add_opposite_play_to(coord):
-    print(coord)
-    if (coord != "DONE"):
-        list_coord = coord.split(",")
-        if (len(list_coord) != 3):
-            map[int(list_coord[0]) - 1][int(list_coord[1]) - 1] = '2'
-        else:
-            map[int(list_coord[0]) - 1][int(list_coord[1]) - 1] = list_coord[2]
+attack = 0
 
 def WriteText(string):
     print(string)
     sys.stdout.flush()
 
+def LaunchMyThread(ClassGame, x, y):
+    ClassGame.addMouve(x, y)
+
+def LaunchEnemyThread(ClassGame, x, y):
+    ClassGame.addEnemyMouve(x, y)
+
+def PutMyPieces(MyBoard, EnnemyBoard, x, y):
+    MyThread = threading.Thread(target=LaunchMyThread, args=(MyBoard, x, y))
+    EnemyThread = threading.Thread(target=LaunchEnemyThread, args=(EnnemyBoard, x, y))
+    MyThread.start()
+    EnemyThread.start()
+    MyThread.join()
+    EnemyThread.join()
+
+def PutEnemyPieces(MyBoard, EnnemyBoard, x, y):
+    MyThread = threading.Thread(target=LaunchEnemyThread, args=(MyBoard, x, y))
+    EnemyThread = threading.Thread(target=LaunchMyThread, args=(EnnemyBoard, x, y))
+    MyThread.start()
+    EnemyThread.start()
+    MyThread.join()
+    EnemyThread.join()
+
+def calcBestMouve(MyBoard, EnnemyBoard):
+    MyBestMouve = MyBoard.GetMoreDangerous()
+    BestEnemyMouve = EnnemyBoard.GetMoreDangerous()
+    x = 0
+    y = 0
+    find = int(0)
+    index = int(0)
+    if (len(BestEnemyMouve) == 0):
+        x = MyBestMouve[0][1]
+        y = MyBestMouve[0][2]
+        PutMyPieces(MyBoard, EnnemyBoard, x, y)
+        WriteText(str(x) + "," + str(y))
+        return
+
+    if (MyBestMouve[0][0] < BestEnemyMouve[0][0]):
+        for EneListData in BestEnemyMouve:
+            for MyListData in MyBestMouve:
+                if (MyListData[1] == EneListData[1] and MyListData[2] == EneListData[2] and find == 0):
+                    find = index
+            index = index + 1
+        #print(find)
+        if (find == 0):
+            find = 0
+        x = BestEnemyMouve[find][1]
+        y = BestEnemyMouve[find][2]
+    else:
+        for MyListData in MyBestMouve:
+            for EneListData in BestEnemyMouve:
+                if (MyListData[1] == EneListData[1] and MyListData[2] == EneListData[2] and find == 0):
+                    find = index
+            index = index + 1
+        #print(find, MyBestMouve)
+        #print(find, BestEnemyMouve)
+        if (find == 0):
+            find = 0
+        x = MyBestMouve[find][1]
+        y = MyBestMouve[find][2]
+
+    #print(x, y)
+    PutMyPieces(MyBoard, EnnemyBoard, x, y)
+    WriteText(str(x) + "," + str(y))
+
 def process_command(command_array, MyBoard, EnnemyBoard):
     if (command_array[0] == "TURN"):
-        add_opposite_play_to(command_array[1])
-        #algo_min_max
-    elif (command_array[0] == "BOARD"):
-        while (command_array != "DONE"):
-            command_array = input()
-            add_opposite_play_to(command_array)
-    elif (command_array[0] == "BEGIN"):
-        # First move at the middle
-        MyBoard.addMyMouve(int(MyBoard.GetSize() / 2), int(MyBoard.GetSize() / 2))
-        EnnemyBoard.addEnemyMouve(int(EnnemyBoard.GetSize() / 2), int(EnnemyBoard.GetSize() / 2))
-        WriteText(str(int(EnnemyBoard.GetSize() / 2)) + "," + str(int(EnnemyBoard.GetSize() / 2)))
+        #Algo Maison
+        position = command_array[1].split(',')
+        PutEnemyPieces(MyBoard, EnnemyBoard, int(position[0]), int(position[1]))
+        calcBestMouve(MyBoard, EnnemyBoard)
+        #print("---------------------------------------------------------------------")
         #MyBoard.PrintMap()
         #EnnemyBoard.PrintMap()
+        #print("---------------------------------------------------------------------")
+    elif (command_array[0] == "BOARD"):
+        while (command_array[0] != "DONE"):
+            command_array = SplitInput()
+    elif (command_array[0] == "BEGIN"):
+        # First move at the middle
+        x = int(MyBoard.GetSize() / 2)
+        y = int(MyBoard.GetSize() / 2)
+        PutMyPieces(MyBoard, EnnemyBoard, x, y)
+        WriteText(str(x) + "," + str(y))
+        #print("---------------------------------------------------------------------")
+        #MyBoard.PrintMap()
+        #EnnemyBoard.PrintMap()
+        #print("---------------------------------------------------------------------")
     elif (command_array[0] == "ABOUT"):
         WriteText("name=\"ui\", version=\"0.1.1\", author=\"Mananka && legau1000\", country=\"FRANCE\"")
     else:
-        WriteText("UNKNOWN Unknow command. Try again!")
+        WriteText("UNKNOWN Unknow command. Try again!"+command_array[0])
 
 def StartGame(MyBoard, EnnemyBoard):
     command_array = SplitInput()
@@ -47,12 +109,12 @@ def StartGame(MyBoard, EnnemyBoard):
 def SplitInput():
     command = input()
     command_array = command.split(" ")
+    while (command_array[0] == "INFO"):
+        command = input()
+        command_array = command.split(" ")
     if (command_array[0] == "END"):
         sys.exit(0)
     return command_array
-
-def MyThread(ClassGame, val):
-    ClassGame.SetValue(val)
 
 def StartFunctionGame():
     try:
@@ -69,16 +131,6 @@ def StartFunctionGame():
         sys.exit(84)
 
 if __name__ == "__main__":
-#    GameTwo = MyGame()
-#    TabThread = []
-#    TabThread.append(threading.Thread(target=MyThread, args=(Game, 10)))
-#    TabThread.append(threading.Thread(target=MyThread, args=(GameTwo, 5)))
-#    TabThread[0].start()
-#    TabThread[1].start()
-#    for index in range(2):
-#        TabThread[index].join()
-#    File = open("C:\\Users\\legau1000\\Desktop\\IA\\guru99.txt", "w+")
-#    File.write("Error link\n")
     end = 0
     size = int(StartFunctionGame())
     MyBoard = MyGame(size)
