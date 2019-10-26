@@ -17,7 +17,7 @@ class MyDanger:
             self._Danger = 0
 
     def GetDanger(self):
-        if (self._Player == '.')
+        if (self._Player == '.'):
             return self._Danger
         else:
             return 0
