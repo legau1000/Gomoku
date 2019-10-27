@@ -54,21 +54,24 @@ class MyMap:
             print()
 
     def cheackCase(self, x, y, value):
-        if (y < 0 or y > self.size or x < 0 or x > self.size):
+        if (y < 0 or y > self.size - 1 or x < 0 or x > self.size - 1):
             return (0)
         if (self._Map[x][y].GetPlayer() == 'X'):
             return (0)
         if (self._Map[x][y].GetPlayer() == 'P'):
             self.suite = self.suite + 1
             return (value)
-        self._Map[x][y].ChangeDanger(value)
+        if (value < 0):
+            self._Map[x][y].ChangeDanger(0)
+        else:
+            self._Map[x][y].ChangeDanger(value)
         return (value - 1)
 
     def PutDanger(self, x, y):
         size = int(2)
         value = int(2)
         tabindex = [int(1), int(1), int(1), int(1), int(1), int(1), int(1), int(1)]
-        tabValue = [int(2), int(2), int(2), int(2), int(2), int(2), int(2), int(2)]
+        tabValue = [int(1), int(1), int(1), int(1), int(1), int(1), int(1), int(1)]
         self.suite = 0
         while (tabValue[0] != 0):
             tabValue[0] = self.cheackCase(x, y - tabindex[0], tabValue[0])
