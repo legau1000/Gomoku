@@ -52,49 +52,43 @@ class MyMap:
                     print(letter.GetPlayer(), end='')
             print()
 
+    def cheackCase(self, x, y, value):
+        if (y < 0 or y > self.size or x < 0 or x > self.size):
+            return (False)
+        if (self._Map[x][y].GetPlayer() == 'X'):
+            return (False)
+        self._Map[x][y].ChangeDanger(value)
+        return (True)
+
+
     def PutDanger(self, x, y):
         size = int(2)
         value = int(2)
+        tabPose = [True, True, True, True, True, True, True, True]
         for index in range(size):
-            if (y - index - 1 >= 0 and self._Map[x][y - index - 1].GetPlayer() != 'X'):
-                self._Map[x][y - index - 1].ChangeDanger(value - index)
-            else:
-                break
-        for index in range(size):
-            if (y + index + 1 < self.size and self._Map[x][y + index + 1].GetPlayer() != 'X'):
-                self._Map[x][y + index + 1].ChangeDanger(value - index)
-            else:
-                break
-        for index in range(size):
-            if (x - index - 1 >= 0 and self._Map[x - index - 1][y].GetPlayer() != 'X'):
-                self._Map[x - index - 1][y].ChangeDanger(value - index)
-            else:
-                break
-        for index in range(size):
-            if (x + index + 1 < self.size and self._Map[x + index + 1][y].GetPlayer() != 'O'):
-                self._Map[x + index + 1][y].ChangeDanger(value - index)
-            else:
-                break
-        for index in range(size):
-            if (x - index - 1 >= 0 and y - index - 1 >= 0 and self._Map[x - index - 1][y - index - 1].GetPlayer() != 'O'):
-                self._Map[x - index - 1][y - index - 1].ChangeDanger(value - index)
-            else:
-                break
-        for index in range(size):
-            if (x + index + 1 < self.size and y + index + 1 < self.size and self._Map[x + index + 1][y + index + 1].GetPlayer() != 'O'):
-                self._Map[x + index + 1][y + index + 1].ChangeDanger(value - index)
-            else:
-                break
-        for index in range(size):
-            if (x + index + 1 < self.size and y - index - 1 >= 0 and self._Map[x + index + 1][y - index - 1].GetPlayer() != 'O'):
-                self._Map[x + index + 1][y - index - 1].ChangeDanger(value - index)
-            else:
-                break
-        for index in range(size):
-            if (y + index + 1 < self.size and x - index - 1 >= 0 and self._Map[x - index - 1][y + index + 1].GetPlayer() != 'O'):
-                self._Map[x - index - 1][y + index + 1].ChangeDanger(value - index)
-            else:
-                break
+            if (tabPose[0] == True):
+                tabPose[0] = self.cheackCase(x, y - index - 1, value - index)
+
+            if (tabPose[1] == True):
+                tabPose[1] = self.cheackCase(x, y + index + 1, value - index)
+
+            if (tabPose[2] == True):
+                tabPose[2] = self.cheackCase(x - index - 1, y, value - index)
+
+            if (tabPose[3] == True):
+                tabPose[3] = self.cheackCase(x + index + 1, y, value - index)
+
+            if (tabPose[4] == True):
+                tabPose[4] = self.cheackCase(x - index - 1, y - index - 1, value - index)
+
+            if (tabPose[5] == True):
+                tabPose[5] = self.cheackCase(x + index + 1, y + index + 1, value - index)
+
+            if (tabPose[6] == True):
+                tabPose[6] = self.cheackCase(x + index + 1, y - index - 1, value - index)
+
+            if (tabPose[7] == True):
+                tabPose[7] = self.cheackCase(x - index - 1, y + index + 1, value - index)
 
     def GetMostDanger(self):
         #sous forme 1->dangereusité  2->x  3->y
