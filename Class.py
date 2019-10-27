@@ -24,6 +24,7 @@ class MyDanger:
 
 class MyMap:
     def __init__(self, size):
+        self.suite = 0
         self.size = size
         self.CreateMap(size)
     
@@ -54,41 +55,79 @@ class MyMap:
 
     def cheackCase(self, x, y, value):
         if (y < 0 or y > self.size or x < 0 or x > self.size):
-            return (False)
+            return (0)
         if (self._Map[x][y].GetPlayer() == 'X'):
-            return (False)
+            return (0)
+        if (self._Map[x][y].GetPlayer() == 'P'):
+            self.suite = self.suite + 1
+            return (value)
         self._Map[x][y].ChangeDanger(value)
-        return (True)
-
+        return (value - 1)
 
     def PutDanger(self, x, y):
         size = int(2)
         value = int(2)
-        tabPose = [True, True, True, True, True, True, True, True]
-        for index in range(size):
-            if (tabPose[0] == True):
-                tabPose[0] = self.cheackCase(x, y - index - 1, value - index)
+        tabindex = [int(1), int(1), int(1), int(1), int(1), int(1), int(1), int(1)]
+        tabValue = [int(2), int(2), int(2), int(2), int(2), int(2), int(2), int(2)]
+        self.suite = 0
+        while (tabValue[0] != 0):
+            tabValue[0] = self.cheackCase(x, y - tabindex[0], tabValue[0])
+            tabindex[0] = tabindex[0] + 1
+        if (self.suite >= 2):
+            #print("DANGER2 ++", self.suite * self.suite, x, y)
+            self._Map[x][y + 1].ChangeDanger(self.suite * self.suite)
 
-            if (tabPose[1] == True):
-                tabPose[1] = self.cheackCase(x, y + index + 1, value - index)
+        self.suite = 0
+        while (tabValue[1] != 0):
+            tabValue[1] = self.cheackCase(x, y + tabindex[1], tabValue[1])
+            tabindex[1] = tabindex[1] + 1
+        if (self.suite >= 2):
+            #print("DANGER ++", self.suite * self.suite, x, y)
+            self._Map[x][y - 1].ChangeDanger(self.suite * self.suite)
 
-            if (tabPose[2] == True):
-                tabPose[2] = self.cheackCase(x - index - 1, y, value - index)
+        self.suite = 0
+        while (tabValue[2] != 0):
+            tabValue[2] = self.cheackCase(x - tabindex[2], y, tabValue[2])
+            tabindex[2] = tabindex[2] + 1
+        if (self.suite >= 2):
+            #print("DANGER ++ + x", self.suite * self.suite, x, y)
+            self._Map[x + 1][y].ChangeDanger(self.suite * self.suite)
 
-            if (tabPose[3] == True):
-                tabPose[3] = self.cheackCase(x + index + 1, y, value - index)
+        self.suite = 0
+        while (tabValue[3] != 0):
+            tabValue[3] = self.cheackCase(x + tabindex[3], y, tabValue[3])
+            tabindex[3] = tabindex[3] + 1
+        if (self.suite >= 2):
+            #print("DANGER ++ - x", self.suite * self.suite, x, y)
+            self._Map[x - 1][y].ChangeDanger(self.suite * self.suite)
 
-            if (tabPose[4] == True):
-                tabPose[4] = self.cheackCase(x - index - 1, y - index - 1, value - index)
+        self.suite = 0
+        while (tabValue[4] != 0):
+            tabValue[4] = self.cheackCase(x - tabindex[4], y - tabindex[4], tabValue[4])
+            tabindex[4] = tabindex[4] + 1
+        if (self.suite >= 2):
+            self._Map[x + 1][y + 1].ChangeDanger(self.suite * self.suite)
 
-            if (tabPose[5] == True):
-                tabPose[5] = self.cheackCase(x + index + 1, y + index + 1, value - index)
+        self.suite = 0
+        while (tabValue[5] != 0):
+            tabValue[5] = self.cheackCase(x + tabindex[5], y + tabindex[5], tabValue[5])
+            tabindex[5] = tabindex[5] + 1
+        if (self.suite >= 2):
+            self._Map[x - 1][y - 1].ChangeDanger(self.suite * self.suite)
 
-            if (tabPose[6] == True):
-                tabPose[6] = self.cheackCase(x + index + 1, y - index - 1, value - index)
+        self.suite = 0
+        while (tabValue[6] != 0):
+            tabValue[6] = self.cheackCase(x + tabindex[6], y - tabindex[6], tabValue[6])
+            tabindex[6] = tabindex[6] + 1
+        if (self.suite >= 2):
+            self._Map[x - 1][y + 1].ChangeDanger(self.suite * self.suite)
 
-            if (tabPose[7] == True):
-                tabPose[7] = self.cheackCase(x - index - 1, y + index + 1, value - index)
+        self.suite = 0
+        while (tabValue[7] != 0):
+            tabValue[7] = self.cheackCase(x - tabindex[7], y + tabindex[7], tabValue[7])
+            tabindex[7] = tabindex[7] + 1
+        if (self.suite >= 2):
+            self._Map[x + 1][y - 1].ChangeDanger(self.suite * self.suite)
 
     def GetMostDanger(self):
         #sous forme 1->dangereusité  2->x  3->y
@@ -98,11 +137,11 @@ class MyMap:
             for idx in range(len(self._Map[index])):
                 if (self._Map[index][idx].GetPlayer() == '.' and int(self._Map[index][idx].GetDanger()) >= bestScore):
                     if (self._Map[index][idx].GetDanger() == bestScore):
-                        TabMouve.append([self._Map[index][idx].GetDanger(), index + 1, idx + 1])
+                        TabMouve.append([self._Map[index][idx].GetDanger(), index, idx])
                     elif int(self._Map[index][idx].GetDanger()) > int(bestScore):
                         bestScore = int(self._Map[index][idx].GetDanger())
                         TabMouve.clear()
-                        TabMouve.append([self._Map[index][idx].GetDanger(), index + 1, idx + 1])
+                        TabMouve.append([self._Map[index][idx].GetDanger(), index, idx])
         #print(TabMouve)
         return TabMouve
 
@@ -158,9 +197,9 @@ class MyGame:
         return self._size
 
     def addMouve(self, x, y):
-        self._Map.AddMouve(x - 1, y - 1, self._player)
-        self._Map.PutSafe(x - 1, y - 1)
+        self._Map.AddMouve(x, y, self._player)
+        self._Map.PutSafe(x, y)
 
     def addEnemyMouve(self, x, y):
-        self._Map.AddMouve(x - 1, y - 1, 'P')
-        self._Map.PutDanger(x - 1, y - 1)
+        self._Map.AddMouve(x, y, 'P')
+        self._Map.PutDanger(x, y)

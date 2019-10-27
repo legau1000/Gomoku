@@ -70,7 +70,6 @@ def calcBestMouve(MyBoard, EnnemyBoard):
         x = MyBestMouve[find][1]
         y = MyBestMouve[find][2]
 
-    #print(x, y)
     PutMyPieces(MyBoard, EnnemyBoard, x, y)
     WriteText(str(x) + "," + str(y))
 
