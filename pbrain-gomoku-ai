@@ -78,16 +78,20 @@ def BoardFunction(MyBoard, EnnemyBoard):
     command_array = ["lel"]
     command = input()
     command_array = command.split(",")
+    attack = False
     while (command_array[0] != "DONE"):
-        print(command_array)
         x = int(command_array[0])
         y = int(command_array[1])
         if (int(command_array[2]) == 1):
+            attack = True
             PutMyPieces(MyBoard, EnnemyBoard, x, y)
         else:
+            attack = False
             PutEnemyPieces(MyBoard, EnnemyBoard, x, y)
         command = input()
         command_array = command.split(",")
+    if (attack == False):
+        calcBestMouve(MyBoard, EnnemyBoard)
 
 def process_command(command_array, MyBoard, EnnemyBoard):
     if (command_array[0] == "TURN"):
