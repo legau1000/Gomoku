@@ -56,42 +56,42 @@ class MyMap:
         size = int(2)
         value = int(2)
         for index in range(size):
-            if (y - index - 1 >= 0 and self._Map[x][y - index - 1].GetPlayer() == '.'):
+            if (y - index - 1 >= 0 and self._Map[x][y - index - 1].GetPlayer() != 'X'):
                 self._Map[x][y - index - 1].ChangeDanger(value - index)
             else:
                 break
         for index in range(size):
-            if (y + index + 1 < self.size and self._Map[x][y + index + 1].GetPlayer() == '.'):
+            if (y + index + 1 < self.size and self._Map[x][y + index + 1].GetPlayer() != 'X'):
                 self._Map[x][y + index + 1].ChangeDanger(value - index)
             else:
                 break
         for index in range(size):
-            if (x - index - 1 >= 0 and self._Map[x - index - 1][y].GetPlayer() == '.'):
+            if (x - index - 1 >= 0 and self._Map[x - index - 1][y].GetPlayer() != 'X'):
                 self._Map[x - index - 1][y].ChangeDanger(value - index)
             else:
                 break
         for index in range(size):
-            if (x + index + 1 < self.size and self._Map[x + index + 1][y].GetPlayer() == '.'):
+            if (x + index + 1 < self.size and self._Map[x + index + 1][y].GetPlayer() != 'O'):
                 self._Map[x + index + 1][y].ChangeDanger(value - index)
             else:
                 break
         for index in range(size):
-            if (x - index - 1 >= 0 and y - index - 1 >= 0 and self._Map[x - index - 1][y - index - 1].GetPlayer() == '.'):
+            if (x - index - 1 >= 0 and y - index - 1 >= 0 and self._Map[x - index - 1][y - index - 1].GetPlayer() != 'O'):
                 self._Map[x - index - 1][y - index - 1].ChangeDanger(value - index)
             else:
                 break
         for index in range(size):
-            if (x + index + 1 < self.size and y + index + 1 < self.size and self._Map[x + index + 1][y + index + 1].GetPlayer() == '.'):
+            if (x + index + 1 < self.size and y + index + 1 < self.size and self._Map[x + index + 1][y + index + 1].GetPlayer() != 'O'):
                 self._Map[x + index + 1][y + index + 1].ChangeDanger(value - index)
             else:
                 break
         for index in range(size):
-            if (x + index + 1 < self.size and y - index - 1 >= 0 and self._Map[x + index + 1][y - index - 1].GetPlayer() == '.'):
+            if (x + index + 1 < self.size and y - index - 1 >= 0 and self._Map[x + index + 1][y - index - 1].GetPlayer() != 'O'):
                 self._Map[x + index + 1][y - index - 1].ChangeDanger(value - index)
             else:
                 break
         for index in range(size):
-            if (y + index + 1 < self.size and x - index - 1 >= 0 and self._Map[x - index - 1][y + index + 1].GetPlayer() == '.'):
+            if (y + index + 1 < self.size and x - index - 1 >= 0 and self._Map[x - index - 1][y + index + 1].GetPlayer() != 'O'):
                 self._Map[x - index - 1][y + index + 1].ChangeDanger(value - index)
             else:
                 break
